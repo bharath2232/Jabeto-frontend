@@ -1,0 +1,8 @@
+.titlePage {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  .Button {
+    margin-top: 10px;
+  }
+}
