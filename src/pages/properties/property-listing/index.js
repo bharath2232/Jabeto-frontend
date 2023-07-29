@@ -30,14 +30,14 @@ import StepperWrapper from "src/@core/styles/mui/stepper";
 
 const steps = [
   {
-    title: "Personal Details",
-    subtitle: "Your Name/Email",
+    title: "Property Type",
+    subtitle: "Type,Surface,Year",
     icon: "mdi:account-outline",
   },
   {
     icon: "mdi:home-outline",
-    title: "Property Details",
-    subtitle: "Property Type",
+    title: "Property Location",
+    subtitle: "Type & location",
   },
   {
     icon: "mdi:star-outline",
@@ -45,8 +45,8 @@ const steps = [
     subtitle: "Bedrooms/Floor No",
   },
   {
-    title: "Property Area",
-    subtitle: "Covered Area",
+    title: "Property Preview",
+    subtitle: "Photos & layouts",
     icon: "mdi:map-marker-outline",
   },
   {
@@ -89,12 +89,19 @@ const PropertyListingWizard = () => {
     }
   };
 
+  const handleStepOne = (e) => {
+    handleNext();
+  };
+  const handleStepTwo = (e) => {
+    handleNext();
+  };
+
   const getStepContent = (step) => {
     switch (step) {
       case 0:
-        return <StepPersonalDetails />;
+        return <StepPersonalDetails sendDataToSteps={handleStepOne} />;
       case 1:
-        return <StepPropertyDetails />;
+        return <StepPropertyDetails sendDataToStepTwo={handleStepTwo} />;
       case 2:
         return <StepPropertyFeatures />;
       case 3:
@@ -183,10 +190,7 @@ const PropertyListingWizard = () => {
         </StepperWrapper>
       </StepperHeaderContainer>
       <div>
-        <CardContent>
-          {renderContent()}
-          {renderFooter()}
-        </CardContent>
+        <CardContent>{renderContent()}</CardContent>
       </div>
     </Card>
   );

@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useAuth } from "src/hooks/useAuth";
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   textDecoration: "none",
@@ -15,7 +16,8 @@ const LinkStyled = styled(Link)(({ theme }) => ({
 const FooterContent = () => {
   // ** Var
   const hidden = useMediaQuery((theme) => theme.breakpoints.down("md"));
-
+  const auth = useAuth();
+  console.log("auth.user", window.localStorage.getItem("accessToken"));
   return (
     <Box
       sx={{
@@ -64,6 +66,7 @@ const FooterContent = () => {
           </LinkStyled>
         </Box>
       )}
+      token : {window.localStorage.getItem("accessToken")}
     </Box>
   );
 };

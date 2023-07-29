@@ -8,6 +8,8 @@ import { useTheme } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import FormControl from "@mui/material/FormControl";
 import InputAdornment from "@mui/material/InputAdornment";
+import { useForm, Controller } from "react-hook-form";
+import { FormHelperText } from "@mui/material";
 
 // ** Icon Imports
 import Icon from "src/@core/components/icon";
@@ -15,6 +17,7 @@ import Icon from "src/@core/components/icon";
 // ** Custom Components Imports
 import CustomRadioIcons from "src/@core/components/custom-radio/icons";
 import GoogleMaps from "./GooglePlaces";
+import { Box, Button } from "@mui/material";
 
 const data = [
   {
@@ -38,14 +41,37 @@ const data = [
   },
 ];
 
-const StepPersonalDetails = () => {
+const StepPersonalDetails = ({ sendDataToSteps }) => {
   const initialIconSelected = data.filter((item) => item.isSelected)[
     data.filter((item) => item.isSelected).length - 1
   ].value;
+  const [propertyType, setPropertyType] = useState("Habitation");
+  const [title, setTitle] = useState("");
+  const [year, setYear] = useState("");
+  const [description, setDescription] = useState("");
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      propertyType: "",
+      title: "",
+      description: "",
+      year: "",
+    },
+  });
 
   // ** States
+
   const [showValues, setShowValues] = useState(false);
   const [selectedRadio, setSelectedRadio] = useState(initialIconSelected);
+
+  console.log("SELECTED", selectedRadio);
+  const onSubmit = (data) => {
+    data.propertyType = selectedRadio;
+    sendDataToSteps(data);
+  };
 
   // ** Hook
   const theme = useTheme();
@@ -90,83 +116,123 @@ const StepPersonalDetails = () => {
   };
 
   return (
-    <Grid container spacing={5}>
-      {data.map((item, index) => (
-        <CustomRadioIcons
-          key={index}
-          data={data[index]}
-          name="custom-radios"
-          icon={icons[index].icon}
-          selected={selectedRadio}
-          gridProps={{ sm: 4, xs: 12 }}
-          handleChange={handleRadioChange}
-          iconProps={icons[index].iconProps}
-        />
-      ))}
-      <Grid item xs={12} md={12}>
-        <FormControl fullWidth>
-          <GoogleMaps />
-        </FormControl>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Grid container spacing={5}>
+        {data.map((item, index) => (
+          <CustomRadioIcons
+            key={index}
+            data={data[index]}
+            name="custom-radios"
+            icon={icons[index].icon}
+            selected={selectedRadio}
+            gridProps={{ sm: 4, xs: 12 }}
+            handleChange={handleRadioChange}
+            iconProps={icons[index].iconProps}
+          />
+        ))}
+
+        <Grid item xs={12} md={8}>
+          <FormControl fullWidth>
+            <Controller
+              name="title"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange, onBlur } }) => (
+                <TextField
+                  autoFocus
+                  label="Title / Label"
+                  placeholder="unique title/lable"
+                  value={value}
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  error={Boolean(errors.title)}
+                />
+              )}
+            />
+            {errors.title && (
+              <FormHelperText sx={{ color: "error.main" }}>
+                {errors.title.message}
+              </FormHelperText>
+            )}
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormControl fullWidth>
+            <Controller
+              name="year"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange, onBlur } }) => (
+                <TextField
+                  autoFocus
+                  label="Year of construction"
+                  placeholder="2022"
+                  value={value}
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  error={Boolean(errors.year)}
+                />
+              )}
+            />
+            {errors.year && (
+              <FormHelperText sx={{ color: "error.main" }}>
+                {errors.year.message}
+              </FormHelperText>
+            )}
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <Controller
+            name="description"
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { value, onChange, onBlur } }) => (
+              <TextField
+                autoFocus
+                label="Description"
+                placeholder="2022"
+                value={value}
+                onBlur={onBlur}
+                onChange={onChange}
+                error={Boolean(errors.description)}
+                fullWidth
+                multiline
+                minRows={2}
+              />
+            )}
+          />
+          {errors.description && (
+            <FormHelperText sx={{ color: "error.main" }}>
+              {errors.description.message}
+            </FormHelperText>
+          )}
+
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: 20,
+            }}
+          >
+            <div>
+              <Button
+                color="secondary"
+                variant="outlined"
+                startIcon={<Icon icon="mdi:arrow-left" />}
+              >
+                back
+              </Button>
+            </div>
+            <div>
+              <Button type="submit" variant="contained">
+                Next
+              </Button>
+            </div>
+          </div>
+        </Grid>
       </Grid>
-      <Grid item xs={12} md={6}>
-        <FormControl fullWidth>
-          <TextField label="First Name" placeholder="John" />
-        </FormControl>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <FormControl fullWidth>
-          <TextField label="Last Name" placeholder="Doe" />
-        </FormControl>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <TextField fullWidth label="Username" placeholder="john.doe" />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <TextField
-          fullWidth
-          label="Password"
-          type={showValues ? "text" : "password"}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  edge="end"
-                  onClick={handleTogglePasswordView}
-                  onMouseDown={(e) => e.preventDefault()}
-                  aria-label="toggle password visibility"
-                >
-                  <Icon
-                    icon={
-                      showValues ? "mdi:eye-outline" : "mdi:eye-off-outline"
-                    }
-                  />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <TextField
-          fullWidth
-          type="email"
-          label="Email"
-          placeholder="john.doe@email.com"
-        />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <TextField
-          fullWidth
-          label="Contact"
-          placeholder="202 555 0111"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">US (+1)</InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
-    </Grid>
+    </form>
   );
 };
 

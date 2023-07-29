@@ -6,3 +6,10 @@
     margin-top: 10px;
   }
 }
+.dropzone {
+  display: flex;
+  justify-content: center;
+  height: 300px;
+  border: dashed black;
+  border-radius: 10px;
+}
