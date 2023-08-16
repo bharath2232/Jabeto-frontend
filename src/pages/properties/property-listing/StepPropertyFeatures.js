@@ -14,9 +14,10 @@ import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Select from "@mui/material/Select";
-
+import Icon from "src/@core/components/icon";
 // ** Custom Components Imports
 import CustomChip from "src/@core/components/mui/chip";
+import { Button, Checkbox, FormGroup } from "@mui/material";
 
 const furnishingArray = [
   "AC",
@@ -51,111 +52,64 @@ const StepPropertyFeatures = () => {
   return (
     <Grid container spacing={5}>
       <Grid item xs={12} md={6}>
-        <TextField fullWidth label="NOMBRE DE PIÈCES" placeholder="3" />
+        <TextField fullWidth label="Pieces" placeholder="3" />
       </Grid>
       <Grid item xs={12} md={6}>
-        <TextField fullWidth label="NOMBRE DE CHAMBRES" placeholder="12" />
+        <TextField fullWidth label="Bedrooms" placeholder="12" />
       </Grid>
       <Grid item xs={12} md={6}>
-        <TextField fullWidth label="SALLES DE BAIN" placeholder="4" />
+        <TextField fullWidth label="Bathroom" placeholder="4" />
       </Grid>
-      c
-      <Grid item xs={12}>
+      <Grid item xs={12} md={6}>
         <FormControl fullWidth>
-          <InputLabel id="select-furnishing-details">
-            Furnishing Details
-          </InputLabel>
+          <InputLabel id="select-furnished-status">Furnished Status</InputLabel>
           <Select
-            labelId="select-furnishing-details"
-            multiple
-            onChange={handleChange}
-            value={furnishingDetails}
-            input={<OutlinedInput label="Furnishing Details" />}
-            renderValue={(selected) => (
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                {selected.map((value) => (
-                  <CustomChip key={value} label={value} skin="light" />
-                ))}
-              </Box>
-            )}
+            id="demo-simple-select"
+            label="Furnished Status"
+            labelId="select-furnished-status"
+            defaultValue=""
           >
-            {furnishingArray.map((furniture) => (
-              <MenuItem key={furniture} value={furniture}>
-                {furniture}
-              </MenuItem>
-            ))}
+            <MenuItem value="Fully Furnished">Fully Furnished</MenuItem>
+            <MenuItem value="Furnished">Furnished</MenuItem>
+            <MenuItem value="Semi Furnished">Semi Furnished</MenuItem>
+            <MenuItem value="UnFurnished">UnFurnished</MenuItem>
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={12} md={3}>
-        <FormControl>
-          <FormLabel
-            id="common-area-radio"
-            sx={{
-              fontWeight: 500,
-              fontSize: "0.875rem",
-              lineHeight: "21px",
-              letterSpacing: "0.1px",
-            }}
-          >
-            Balcon
-          </FormLabel>
-          <RadioGroup
-            defaultValue="yes"
-            name="common-area-group"
-            aria-labelledby="common-area-radio"
-          >
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-        </FormControl>
+
+      <Grid item xs={12} md={6}>
+        <FormGroup>
+          <FormControlLabel
+            control={<Checkbox defaultChecked />}
+            label="Elevator"
+          />
+          <FormControlLabel required control={<Checkbox />} label="Garden" />
+          <FormControlLabel required control={<Checkbox />} label="Balcony" />
+        </FormGroup>
       </Grid>
-      <Grid item xs={12} md={3}>
-        <FormControl>
-          <FormLabel
-            id="balcony-radio"
-            sx={{
-              fontWeight: 500,
-              fontSize: "0.875rem",
-              lineHeight: "21px",
-              letterSpacing: "0.1px",
-            }}
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: 20,
+        }}
+      >
+        <div>
+          <Button
+            color="secondary"
+            variant="outlined"
+            startIcon={<Icon icon="mdi:arrow-left" />}
           >
-            Terrasse
-          </FormLabel>
-          <RadioGroup
-            defaultValue="yes"
-            name="balcony-group"
-            aria-labelledby="balcony-radio"
-          >
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-        </FormControl>
-      </Grid>
-      <Grid item xs={12} md={3}>
-        <FormControl>
-          <FormLabel
-            id="balcony-radio"
-            sx={{
-              fontWeight: 500,
-              fontSize: "0.875rem",
-              lineHeight: "21px",
-              letterSpacing: "0.1px",
-            }}
-          >
-            Ascenseur
-          </FormLabel>
-          <RadioGroup
-            defaultValue="yes"
-            name="balcony-group"
-            aria-labelledby="balcony-radio"
-          >
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-        </FormControl>
-      </Grid>
+            back
+          </Button>
+        </div>
+        <div>
+          <Button type="submit" variant="contained">
+            Next
+          </Button>
+        </div>
+      </div>
     </Grid>
   );
 };
