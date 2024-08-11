@@ -54,6 +54,8 @@ import "../../styles/globals.css";
 
 import "../../styles/appstyles.css";
 import { FilesProvider } from "src/context/FilesContext";
+import { PropertiesProvider } from "src/context/PropertiesContext";
+
 const clientSideEmotionCache = createEmotionCache();
 
 // ** Pace Loader
@@ -113,33 +115,35 @@ const App = (props) => {
 
       <AuthProvider>
         <FilesProvider>
-          <SettingsProvider
-            {...(setConfig ? { pageSettings: setConfig() } : {})}
-          >
-            <SettingsConsumer>
-              {({ settings }) => {
-                return (
-                  <ThemeComponent settings={settings}>
-                    <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                      <AclGuard
-                        aclAbilities={aclAbilities}
-                        guestGuard={guestGuard}
-                        authGuard={authGuard}
-                      >
-                        {getLayout(<Component {...pageProps} />)}
-                      </AclGuard>
-                    </Guard>
-                    <ReactHotToast>
-                      <Toaster
-                        position={settings.toastPosition}
-                        toastOptions={{ className: "react-hot-toast" }}
-                      />
-                    </ReactHotToast>
-                  </ThemeComponent>
-                );
-              }}
-            </SettingsConsumer>
-          </SettingsProvider>
+          <PropertiesProvider>
+            <SettingsProvider
+              {...(setConfig ? { pageSettings: setConfig() } : {})}
+            >
+              <SettingsConsumer>
+                {({ settings }) => {
+                  return (
+                    <ThemeComponent settings={settings}>
+                      <Guard authGuard={authGuard} guestGuard={guestGuard}>
+                        <AclGuard
+                          aclAbilities={aclAbilities}
+                          guestGuard={guestGuard}
+                          authGuard={authGuard}
+                        >
+                          {getLayout(<Component {...pageProps} />)}
+                        </AclGuard>
+                      </Guard>
+                      <ReactHotToast>
+                        <Toaster
+                          position={settings.toastPosition}
+                          toastOptions={{ className: "react-hot-toast" }}
+                        />
+                      </ReactHotToast>
+                    </ThemeComponent>
+                  );
+                }}
+              </SettingsConsumer>
+            </SettingsProvider>
+          </PropertiesProvider>
         </FilesProvider>
       </AuthProvider>
     </CacheProvider>

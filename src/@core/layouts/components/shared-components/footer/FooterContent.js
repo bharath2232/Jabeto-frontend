@@ -16,8 +16,8 @@ const LinkStyled = styled(Link)(({ theme }) => ({
 const FooterContent = () => {
   // ** Var
   const hidden = useMediaQuery((theme) => theme.breakpoints.down("md"));
-  const auth = useAuth();
-  console.log("auth.user", window.localStorage.getItem("accessToken"));
+  const { user } = useAuth();
+  console.log("auth.user", user);
   return (
     <Box
       sx={{

@@ -18,7 +18,9 @@ import Icon from "src/@core/components/icon";
 
 // ** Third Party Imports
 import { useDropzone } from "react-dropzone";
+import { Card, CardContent, CardMedia, Grid } from "@mui/material";
 
+const imageBaseUrl = "http://localhost:1337";
 // Styled component for the upload image inside the dropzone area
 const Img = styled("img")(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
@@ -45,6 +47,9 @@ const FileUploaderMultiple = () => {
   const [files, setFiles] = useState([]);
 
   const _files = useFiles();
+  const uploadedFiles = _files.files;
+  console.log("uploaded", uploadedFiles);
+
   const handleUpload = () => {
     console.log("clicked");
     _files.upload({ files }, (e) => {
@@ -105,44 +110,62 @@ const FileUploaderMultiple = () => {
 
   return (
     <Fragment>
-      <div {...getRootProps({ className: "dropzone" })}>
-        <input {...getInputProps()} />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: ["column", "column", "row"],
-            alignItems: "center",
-            margin: "20px",
-          }}
-        >
-          <Img
-            width={300}
-            alt="Upload img"
-            src="https://demos.pixinvent.com/materialize-nextjs-admin-template/demo-3/images/misc/upload.png"
-          />
+      {uploadedFiles.length > 0 ? (
+        uploadedFiles.map((item) => {
+          return (
+            <Grid style={{ border: 1 }}>
+              <Card sx={{ width: 200, border: 1 }}>
+                <CardMedia
+                  sx={{ height: 201 }}
+                  image={`${imageBaseUrl}${item.url}`}
+                />
+              </Card>
+            </Grid>
+          );
+        })
+      ) : (
+        <div {...getRootProps({ className: "dropzone" })}>
+          <input {...getInputProps()} />
           <Box
             sx={{
               display: "flex",
-              flexDirection: "column",
-              textAlign: ["center", "center", "inherit"],
+              flexDirection: ["column", "column", "row"],
+              alignItems: "center",
+              margin: "20px",
             }}
           >
-            <HeadingTypography variant="h5">
-              Drop files here or click to upload.
-            </HeadingTypography>
-            <Typography
-              color="textSecondary"
-              sx={{ "& a": { color: "primary.main", textDecoration: "none" } }}
+            <Img
+              width={120}
+              alt="Upload img"
+              src="https://demos.pixinvent.com/materialize-nextjs-admin-template/demo-3/images/misc/upload.png"
+            />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                textAlign: ["center", "center", "inherit"],
+              }}
             >
-              Drop files here or click{" "}
-              <Link href="/" onClick={(e) => e.preventDefault()}>
-                browse
-              </Link>{" "}
-              thorough your machine
-            </Typography>
+              <HeadingTypography variant="h5">
+                Upload your property photos. atleast one.
+              </HeadingTypography>
+              <Typography
+                color="textSecondary"
+                sx={{
+                  "& a": { color: "primary.main", textDecoration: "none" },
+                }}
+              >
+                Drop files here or click{" "}
+                <Link href="/" onClick={(e) => e.preventDefault()}>
+                  browse
+                </Link>{" "}
+                thorough your machine
+              </Typography>
+            </Box>
           </Box>
-        </Box>
-      </div>
+        </div>
+      )}
+
       {files.length ? (
         <Fragment>
           <List>{fileList}</List>

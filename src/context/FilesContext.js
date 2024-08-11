@@ -22,7 +22,10 @@ const FilesProvider = ({ children }) => {
   // ** States
   const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [user, setUser] = useState(defaultProvider.user);
+  const [files, setFiles] = useState([]);
+
   const [loading, setLoading] = useState(defaultProvider.loading);
+  console.log("heavy user", user);
 
   // ** Hooks
   const router = useRouter();
@@ -36,7 +39,7 @@ const FilesProvider = ({ children }) => {
         params.rememberMe
           ? window.localStorage.setItem(
               authConfig.storageTokenKeyName,
-              "Bearer" + " " + response.data.jwt,
+              "Bearer" + " " + response.data.jwt
             )
           : null;
         const returnUrl = router.query.returnUrl;
@@ -44,7 +47,7 @@ const FilesProvider = ({ children }) => {
         params.rememberMe
           ? window.localStorage.setItem(
               "userData",
-              JSON.stringify(response.data.user),
+              JSON.stringify(response.data.user)
             )
           : null;
         const redirectURL = returnUrl && returnUrl !== "/" ? returnUrl : "/";
@@ -66,10 +69,10 @@ const FilesProvider = ({ children }) => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://localhost:1337/api/upload",
+      url: `${apiUrl}/api/upload`,
       headers: {
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNjkwMjgyMjgzLCJleHAiOjE2OTI4NzQyODN9.pfv1ULuRb0KpfYX-O60JWHlrKX6BbvISpXHi2ueRzDk",
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzEwNzg1Mzk2LCJleHAiOjE3MTMzNzczOTZ9.lDnXW-K5Na-mTyTIzt3O6XR2A8a7Kgf5-gppzwqjVjA",
         "Content-Type": "multipart/form-data",
       },
       data: filesData,
@@ -78,7 +81,7 @@ const FilesProvider = ({ children }) => {
     axios
       .request(config)
       .then((response) => {
-        console.log(JSON.stringify(response.data));
+        setFiles(response.data);
       })
       .catch((error) => {
         if (errorCallback) errorCallback(error);
@@ -92,6 +95,7 @@ const FilesProvider = ({ children }) => {
   };
 
   const values = {
+    files,
     user,
     loading,
     setUser,

@@ -18,6 +18,8 @@ const defaultProvider = {
   setLoading: () => Boolean,
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
+  properties: [],
+  propertyById: {},
 };
 const PropertiesContext = createContext(defaultProvider);
 
@@ -26,14 +28,17 @@ const PropertiesProvider = ({ children }) => {
   const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [user, setUser] = useState(defaultProvider.user);
   const [loading, setLoading] = useState(defaultProvider.loading);
-
+  const [properties, setProperties] = useState(defaultProvider.properties);
+  const [propertyById, setProperty] = useState(defaultProvider.propertyById);
   // ** Hooks
   const router = useRouter();
+
   useEffect(() => {
     const initAuth = async () => {
       const storedToken = window.localStorage.getItem(
-        authConfig.storageTokenKeyName,
+        authConfig.storageTokenKeyName
       );
+      console.log("sssst", storedToken);
       if (storedToken) {
         setLoading(true);
         await axios
@@ -77,7 +82,7 @@ const PropertiesProvider = ({ children }) => {
         params.rememberMe
           ? window.localStorage.setItem(
               authConfig.storageTokenKeyName,
-              "Bearer" + " " + response.data.jwt,
+              "Bearer" + " " + response.data.jwt
             )
           : null;
         const returnUrl = router.query.returnUrl;
@@ -85,7 +90,7 @@ const PropertiesProvider = ({ children }) => {
         params.rememberMe
           ? window.localStorage.setItem(
               "userData",
-              JSON.stringify(response.data.user),
+              JSON.stringify(response.data.user)
             )
           : null;
         const redirectURL = returnUrl && returnUrl !== "/" ? returnUrl : "/";
@@ -95,32 +100,94 @@ const PropertiesProvider = ({ children }) => {
         if (errorCallback) errorCallback(err);
       });
   };
-  const handleRegister = (params, errorCallback) => {
-    params.username = params.email;
-    params.accountType = "landlord";
+  const handelSaveProperty = (params, errorCallback) => {
+    const storedToken = window.localStorage.getItem(
+      authConfig.storageTokenKeyName
+    );
+    console.log("param1", params);
+    let data = {
+      data: params,
+    };
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: `${apiUrl}/api/properties`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: storedToken,
+      },
+      data: data,
+    };
 
     axios
-      .post(`${apiUrl}/api/auth/local/register`, params)
-      .then(async (response) => {
-        console.log(response);
-        router.push("/login?registration=success");
+      .request(config)
+      .then((response) => {
+        console.log("prod9", response.data);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
-  const handleLogout = () => {
-    setUser(null);
-    window.localStorage.removeItem("userData");
-    window.localStorage.removeItem(authConfig.storageTokenKeyName);
-    router.push("/login");
-  };
+  const fetchProperties = (params, errorCallback) => {
+    const storedToken = window.localStorage.getItem(
+      authConfig.storageTokenKeyName
+    );
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `${apiUrl}/api/properties`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: storedToken,
+      },
+    };
 
+    axios
+      .request(config)
+      .then((response) => {
+        console.log("setProperties");
+        setProperties(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const fetchPropertyById = (id, errorCallback) => {
+    const storedToken = window.localStorage.getItem(
+      authConfig.storageTokenKeyName
+    );
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `${apiUrl}/api/properties/${id}`,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: storedToken,
+      },
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        console.log("setProperties");
+        setProperty(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const values = {
     user,
     loading,
     setUser,
     setLoading,
     login: handleLogin,
-    logout: handleLogout,
-    register: handleRegister,
+    saveProperty: handelSaveProperty,
+    fetchProperties: fetchProperties,
+    fetchPropertyById: fetchPropertyById,
+    properties,
+    propertyById,
   };
 
   return (

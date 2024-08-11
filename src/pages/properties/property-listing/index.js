@@ -27,6 +27,7 @@ import StepPropertyFeatures from "./StepPropertyFeatures";
 
 // ** Styled Components
 import StepperWrapper from "src/@core/styles/mui/stepper";
+import AddPropertyForm from "./AddPropertyForm";
 
 const steps = [
   {
@@ -148,51 +149,9 @@ const PropertyListingWizard = () => {
   };
 
   return (
-    <Card sx={{ display: "flex", flexDirection: { xs: "column", lg: "row" } }}>
-      <StepperHeaderContainer>
-        <StepperWrapper
-          sx={{
-            height: "100%",
-            "& .MuiStepLabel-label": { cursor: "pointer" },
-          }}
-        >
-          <Stepper
-            connector={<></>}
-            activeStep={activeStep}
-            orientation="vertical"
-          >
-            {steps.map((step, index) => {
-              return (
-                <Step
-                  key={index}
-                  onClick={() => setActiveStep(index)}
-                  sx={{ "&.Mui-completed + svg": { color: "primary.main" } }}
-                >
-                  <StepLabel StepIconComponent={StepperCustomDot}>
-                    <div className="step-label">
-                      <Typography className="step-number">{`0${
-                        index + 1
-                      }`}</Typography>
-                      <div>
-                        <Typography className="step-title">
-                          {step.title}
-                        </Typography>
-                        <Typography className="step-subtitle">
-                          {step.subtitle}
-                        </Typography>
-                      </div>
-                    </div>
-                  </StepLabel>
-                </Step>
-              );
-            })}
-          </Stepper>
-        </StepperWrapper>
-      </StepperHeaderContainer>
-      <div>
-        <CardContent>{renderContent()}</CardContent>
-      </div>
-    </Card>
+    <div>
+      <AddPropertyForm />
+    </div>
   );
 };
 
