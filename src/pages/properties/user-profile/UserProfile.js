@@ -20,11 +20,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Icon from "src/@core/components/icon";
 
 // ** Demo Components
-import Teams from "src/views/pages/user-profile/teams";
-import Profile from "src/views/pages/user-profile/profile";
-import Projects from "src/views/pages/user-profile/projects";
-import Connections from "src/views/pages/user-profile/connections";
-import UserProfileHeader from "src/views/pages/user-profile/UserProfileHeader";
+import Teams from "../user-profile/teams";
+import Profile from "../user-profile/profile";
+import Projects from "../user-profile/projects";
+import Connections from "../user-profile/connections";
+import UserProfileHeader from "../user-profile/UserProfileHeader";
 
 const TabList = styled(MuiTabList)(({ theme }) => ({
   "& .MuiTabs-indicator": {

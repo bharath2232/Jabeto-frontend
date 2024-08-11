@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // ** Demo Components Imports
-import UserProfile from "src/views/pages/user-profile/UserProfile";
+import UserProfile from "../user-profile/UserProfile";
 
 const UserProfileTab = ({ tab, data }) => {
   console.log("tab", tab, data);
