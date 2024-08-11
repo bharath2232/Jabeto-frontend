@@ -20,10 +20,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Icon from "src/@core/components/icon";
 
 // ** Demo Components
-import Teams from "../user-profile/teams";
-import Profile from "../user-profile/profile";
-import Projects from "../user-profile/projects";
-import Connections from "../user-profile/connections";
+
 import UserProfileHeader from "../user-profile/UserProfileHeader";
 
 const TabList = styled(MuiTabList)(({ theme }) => ({
@@ -73,13 +70,6 @@ const UserProfile = ({ tab, data }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab]);
-
-  const tabContentList = {
-    profile: <Profile data={data} />,
-    teams: <Teams data={data} />,
-    projects: <Projects data={data} />,
-    connections: <Connections data={data} />,
-  };
 
   return (
     <Grid container spacing={6}>
@@ -173,9 +163,7 @@ const UserProfile = ({ tab, data }) => {
                     <Typography>Loading...</Typography>
                   </Box>
                 ) : (
-                  <TabPanel sx={{ p: 0 }} value={activeTab}>
-                    {tabContentList[activeTab]}
-                  </TabPanel>
+                  <div>test</div>
                 )}
               </Grid>
             </Grid>

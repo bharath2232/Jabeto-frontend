@@ -48,7 +48,7 @@ const UserProfileHeader = ({ propertyById }) => {
         component="img"
         alt="profile-header"
         image={
-          propertyById
+          propertyById?.attributes?.images[0]?.url
             ? `${imageBaseUrl}${propertyById?.attributes?.images[0].url} `
             : data.coverImg
         }
